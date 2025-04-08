@@ -14,7 +14,7 @@ mod sausage_factory {
     fn make_sausage() {
         get_secret_recipe();
         println!("sausage!");
-    }
+    }                  
 }
 
 fn main() {

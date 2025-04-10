@@ -62,7 +62,7 @@ impl From<&str> for Person {
                     }else{
                         Person{
                             name:name.unwrap().to_string(),
-                            age:age.expect("REASON"),
+                            age:age.unwrap(),
                         }
                     }
                 }

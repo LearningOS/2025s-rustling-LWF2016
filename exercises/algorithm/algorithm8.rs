@@ -2,7 +2,7 @@
 	queue
 	This question requires you to use queues to implement the functionality of the stac
 */
-// I AM NOT DONE
+
 
 #[derive(Debug)]
 pub struct Queue<T> {
@@ -55,6 +55,7 @@ impl<T> Default for Queue<T> {
 pub struct myStack<T>
 {
 	//TODO
+    // size:i32,
 	q1:Queue<T>,
 	q2:Queue<T>
 }
@@ -62,20 +63,51 @@ impl<T> myStack<T> {
     pub fn new() -> Self {
         Self {
 			//TODO
+            // size:0,
 			q1:Queue::<T>::new(),
 			q2:Queue::<T>::new()
         }
     }
     pub fn push(&mut self, elem: T) {
         //TODO
+        // while let Ok(s) = self.q2.dequeue(){
+        //     self.q1.enqueue(s);
+        // }
+        // self.q1.enqueue(elem);
+        // self.size+=1;
+        self.q2.enqueue(elem);
+
+        while !self.q1.is_empty() {
+            if let Ok(data) = self.q1.dequeue() {
+                self.q2.enqueue(data);
+            }
+        }
+
+        std::mem::swap(&mut self.q1, &mut self.q2);
     }
     pub fn pop(&mut self) -> Result<T, &str> {
-        //TODO
-		Err("Stack is empty")
+        // if self.size == 0{
+        //     Err("Stack is empty")
+        // }else{
+        //     while let Ok(s) = self.q1.dequeue(){
+        //         self.q2.enqueue(s);
+        //     }
+        //     self.size-=1;
+        //     self.q2.dequeue()
+        // }
+        if self.q1.is_empty() {
+            return Err("Stack is empty");
+        }
+        self.q1.dequeue()
     }
     pub fn is_empty(&self) -> bool {
 		//TODO
-        true
+        // if self.size==0{
+        //     true
+        // }else{
+        //     false
+        // }
+        self.q1.is_empty()
     }
 }
 

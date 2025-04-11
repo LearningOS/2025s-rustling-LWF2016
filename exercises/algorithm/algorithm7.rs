@@ -3,13 +3,14 @@
 	This question requires you to use a stack to achieve a bracket match
 */
 
-// I AM NOT DONE
+
 #[derive(Debug)]
 struct Stack<T> {
 	size: usize,
 	data: Vec<T>,
 }
-impl<T> Stack<T> {
+impl<T> Stack<T>
+where T:Clone{
 	fn new() -> Self {
 		Self {
 			size: 0,
@@ -32,7 +33,13 @@ impl<T> Stack<T> {
 	}
 	fn pop(&mut self) -> Option<T> {
 		// TODO
-		None
+		if self.size>0{
+			self.size-=1;
+			// Some(self.data[self.size].clone())
+			self.data.pop()
+		}else{
+			None
+		}
 	}
 	fn peek(&self) -> Option<&T> {
 		if 0 == self.size {
@@ -102,7 +109,40 @@ impl<'a, T> Iterator for IterMut<'a, T> {
 fn bracket_match(bracket: &str) -> bool
 {
 	//TODO
-	true
+	let mut st = Stack::new();
+	let mut string = bracket.chars();
+	while let Some(s) = string.next(){
+		println!("{}", s);
+		if s=='(' || s=='[' || s=='{'{
+			st.push(s);
+		}else if s=='}'{
+			if let Some(a) = st.pop(){
+				if a != '{' {
+					return false;
+				}
+			}else{
+				return false;
+			}
+		}else if s==']'{
+			if let Some(a) = st.pop(){
+				if a != '[' {
+					return false;
+				}
+			}else{
+				return false;
+			}
+		}else if s==')'{
+			if let Some(a) = st.pop(){
+				if a != '(' {
+					return false;
+				}
+			}else{
+				return false;
+			}
+		}
+	}
+
+    st.is_empty()
 }
 
 #[cfg(test)]
@@ -111,7 +151,7 @@ mod tests {
 	
 	#[test]
 	fn bracket_matching_1(){
-		let s = "(2+3){func}[abc]";
+		let s = "(2+3){func}[abc]" ;
 		assert_eq!(bracket_match(s),true);
 	}
 	#[test]

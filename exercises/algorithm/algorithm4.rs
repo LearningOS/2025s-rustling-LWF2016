@@ -3,7 +3,7 @@
 	This problem requires you to implement a basic interface for a binary tree
 */
 
-//I AM NOT DONE
+
 use std::cmp::Ordering;
 use std::fmt::Debug;
 
@@ -41,7 +41,7 @@ where
 
 impl<T> BinarySearchTree<T>
 where
-    T: Ord,
+    T: Ord + std::fmt::Debug,
 {
 
     fn new() -> Self {
@@ -51,12 +51,25 @@ where
     // Insert a value into the BST
     fn insert(&mut self, value: T) {
         //TODO
+        if self.root.is_none(){
+            let node = TreeNode::new(value);
+            self.root = Some(Box::new(node));
+        }else{
+            // println!("{:?}", self.root);
+            if let Some(a) = &mut self.root{
+                a.insert(value);
+            }
+        }
     }
 
     // Search for a value in the BST
     fn search(&self, value: T) -> bool {
         //TODO
-        true
+        if let Some(a) = &self.root{
+            a.search(value)
+        }else{
+            false
+        }
     }
 }
 
@@ -67,6 +80,41 @@ where
     // Insert a node into the tree
     fn insert(&mut self, value: T) {
         //TODO
+        if (*self).value < value {
+            if let Some(a) = &mut (*self).left{
+                a.insert(value);
+            }else{
+                let a = TreeNode::new(value);
+                (*self).left=Some(Box::new(a));
+            }
+        }else if (*self).value > value{
+            if let Some(a) = &mut (*self).right{
+                a.insert(value);
+            }else{
+                let a = TreeNode::new(value);
+                (*self).right=Some(Box::new(a));
+            }
+        }else{
+            return
+        }
+    }
+
+    fn search(&self, value: T) -> bool{
+        if (*self).value == value {
+            true
+        } else if (*self).value < value {
+            if let Some(a) = &(*self).left{
+                (*a).search(value)
+            }else{
+                false
+            }
+        } else {
+            if let Some(a) = &(*self).right{
+                (*a).search(value)
+            }else{
+                false
+            }
+        }
     }
 }
 

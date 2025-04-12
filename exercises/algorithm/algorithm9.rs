@@ -2,7 +2,7 @@
 	heap
 	This question requires you to implement a binary heap function
 */
-// I AM NOT DONE
+
 
 use std::cmp::Ord;
 use std::default::Default;
@@ -38,6 +38,17 @@ where
 
     pub fn add(&mut self, value: T) {
         //TODO
+        self.count+=1;
+        self.items.push(value);
+        let mut idx=self.count;
+        while idx>1{
+            if (self.comparator)(&self.items[idx], &self.items[idx/2]){
+                self.items.swap(idx, idx/2);
+                idx=idx/2;
+            }else{
+                break;
+            }
+        }
     }
 
     fn parent_idx(&self, idx: usize) -> usize {
@@ -57,8 +68,7 @@ where
     }
 
     fn smallest_child_idx(&self, idx: usize) -> usize {
-        //TODO
-		0
+        0
     }
 }
 
@@ -79,13 +89,32 @@ where
 
 impl<T> Iterator for Heap<T>
 where
-    T: Default,
+    T: Default + Clone,
 {
     type Item = T;
 
     fn next(&mut self) -> Option<T> {
-        //TODO
-		None
+        if self.count==0{
+            None
+        }else{
+            let mut idx = 1;
+            self.items.swap(self.count, 1);
+            self.count-=1;
+            while idx <= self.count/2{
+                let mut temp = idx*2;
+                if idx*2+1 <= self.count && (self.comparator)(&self.items[idx*2+1], &self.items[idx*2]){
+                    temp = idx*2+1;
+                }
+
+                if (self.comparator)(&self.items[temp], &self.items[idx]){
+                    self.items.swap(idx, temp);
+                    idx=temp;
+                }else{
+                    break;
+                }
+            }
+            Some(self.items.remove(self.count+1))
+        }
     }
 }
 
